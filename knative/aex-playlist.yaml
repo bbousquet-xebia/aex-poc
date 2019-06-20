@@ -10,3 +10,6 @@ spec:
         spec:
           container:
             image: eu.gcr.io/knative-sample/aex-playlist:1.0
+            env:
+              - name: PROJECT_VERSION
+                value: 0.1.0

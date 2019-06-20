@@ -16,6 +16,10 @@ spec:
       value: eu.gcr.io/knative-sample/aex-playlist
     - name: imageTag
       value: "1.0"
+    - name: pathToDockerFile
+      value: "playlist/Dockerfile"
+    - name: pathToContext
+      value: "playlist"
   trigger:
     type: manual
   serviceAccount: pipeline-account
