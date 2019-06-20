@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  generateName: aex-poc-pr-
+spec:
+  pipelineRef:
+    name: build-and-deploy-pipeline
+  resources:
+    - name: git-source
+      resourceRef:
+        name: aex-poc-git
+  params:
+    - name: pathToYamlFile
+      value: "knative/aex-playlist.yaml"
+    - name: imageUrl
+      value: eu.gcr.io/knative-sample/aex-playlist
+    - name: imageTag
+      value: "1.0"
+  trigger:
+    type: manual
+  serviceAccount: pipeline-account
