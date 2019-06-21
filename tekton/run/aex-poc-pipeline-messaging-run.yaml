@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  generateName: aex-poc-messaging-pr-
+spec:
+  pipelineRef:
+    name: build-and-deploy-pipeline
+  resources:
+    - name: git-source
+      resourceRef:
+        name: aex-poc-git
+  params:
+    - name: pathToYamlFile
+      value: "knative/aex-messaging.yaml"
+    - name: imageUrl
+      value: eu.gcr.io/knative-sample/aex-messaging
+    - name: imageTag
+      value: "1.0"
+    - name: pathToDockerFile
+      value: "messaging/Dockerfile"
+    - name: pathToContext
+      value: "messaging"
+  trigger:
+    type: manual
+  serviceAccount: pipeline-account

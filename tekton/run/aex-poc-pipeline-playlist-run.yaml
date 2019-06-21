@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  generateName: aex-poc-pr-
+  generateName: aex-poc-playlist-pr-
 spec:
   pipelineRef:
     name: build-and-deploy-pipeline

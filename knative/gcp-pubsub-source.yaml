@@ -1,0 +1,15 @@
+apiVersion: sources.eventing.knative.dev/v1alpha1
+kind: GcpPubSubSource
+metadata:
+  name: podcast-source
+spec:
+  gcpCredsSecret:  # A secret in the knative-sources namespace
+    name: google-cloud-key
+    key: key.json
+  googleCloudProject: knative-sample  # Replace this
+  topic: podcast
+  sink:
+    apiVersion: eventing.knative.dev/v1alpha1
+    kind: Broker
+    name: default
+

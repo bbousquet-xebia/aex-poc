@@ -1,4 +1,4 @@
-package fr.xebia.ca.ops.referentiel;
+package fr.aex.poc.playlist;
 
 import lombok.Builder;
 import lombok.Value;

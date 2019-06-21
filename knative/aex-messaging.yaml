@@ -1,0 +1,15 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: aex-messaging
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      revisionTemplate:
+        spec:
+          container:
+            image: eu.gcr.io/knative-sample/aex-messaging:1.0
+            env:
+              - name: PROJECT_VERSION
+                value: 0.1.0
