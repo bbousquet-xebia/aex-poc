@@ -8,7 +8,7 @@ spec:
   template:
     spec:
       containers:
-      - image: eu.gcr.io/knative-sample/aex-messaging
+      - image: eu.gcr.io/knative-sample/aex-messaging-vertx
 
 ---
 
