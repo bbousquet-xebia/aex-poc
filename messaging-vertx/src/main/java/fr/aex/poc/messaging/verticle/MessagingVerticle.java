@@ -1,7 +1,8 @@
 package fr.aex.poc.messaging.verticle;
 
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
+import io.cloudevents.http.reactivex.vertx.VertxCloudEvents;
+import io.vertx.reactivex.core.AbstractVerticle;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,20 +10,20 @@ public class MessagingVerticle extends AbstractVerticle {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessagingVerticle.class);
 
-    @Override
-    public void start(Future<Void> startFuture) throws Exception {
-        vertx.createHttpServer().requestHandler(req ->
-                req.response()
-                        .putHeader("content-type", "text/plain")
-                        .end("Hello from Vert.x!")
-        ).listen(8080, http -> {
-            if (http.succeeded()) {
-                startFuture.complete();
-                LOG.info("HTTP server started on http://localhost:8080");
-            } else {
-                startFuture.fail(http.cause());
-            }
-        });
+    public void start() {
+
+        vertx.createHttpServer()
+                .requestHandler(req -> VertxCloudEvents.create().rxReadFromRequest(req)
+                        .subscribe((receivedEvent, throwable) -> {
+                            if (receivedEvent != null) {
+                                // I got a CloudEvent object:
+                                System.out.println("The event type: " + receivedEvent.getType());
+                            }
+                        }))
+                .rxListen(8080)
+                .subscribe(server -> {
+                    System.out.println("Server running!");
+                });
     }
 
 }
