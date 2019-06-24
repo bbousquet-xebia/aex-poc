@@ -24,6 +24,7 @@ public class MessagingVerticle extends AbstractVerticle {
                             if (receivedEvent != null) {
 
                                 System.out.println("The event type: " + receivedEvent.getType());
+                                System.out.println("The content: " + ((Event) receivedEvent.getData().get()).message);
 
                             }
                         }))
