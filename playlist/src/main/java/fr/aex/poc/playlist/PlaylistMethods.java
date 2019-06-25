@@ -55,6 +55,8 @@ public class PlaylistMethods {
             podcasts = result.result;
             endCursor = result.cursor;
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Exception !" + e);
         }
 
         podcasts.addAll(podcasts);
