@@ -4,12 +4,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import fr.aex.poc.playlist.daos.DatastoreDao;
+import fr.aex.poc.playlist.daos.PodcastDao;
+import fr.aex.poc.playlist.objects.Podcast;
+import fr.aex.poc.playlist.objects.Result;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ReferentielMethods {
+public class PlaylistMethods {
 
     public static String getProjectId() {
         return System.getenv("PROJECT_ID");
@@ -39,10 +44,21 @@ public class ReferentielMethods {
         return System.getenv("TRAINS_REF_FILE_NAME");
     }
 
-    public static List<Train> getTrains() throws IOException {
+    public static List<Podcast> listPodcasts(String startCursor) throws IOException {
 
-        ObjectMapper mapper = new ObjectMapper();
+        PodcastDao dao = new DatastoreDao();
 
-        return mapper.readValue(readResource(getTrainsFile(), Charsets.UTF_8), new TypeReference<List<Train>>(){});
+        List<Podcast> podcasts = new ArrayList<>();
+        String endCursor = null;
+        try {
+            Result<Podcast> result = dao.listPodcasts(startCursor);
+            podcasts = result.result;
+            endCursor = result.cursor;
+        } catch (Exception e) {
+        }
+
+        podcasts.addAll(podcasts);
+
+        return podcasts;
     }
 }

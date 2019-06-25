@@ -42,6 +42,8 @@ public class MessagingVerticle extends AbstractVerticle {
         Event event = new Event();
         event.message = "sfsdf";
 
+//        {"ID":"640313443588257","Data":"eyJtZXNzYWdlIjoiR3JycnJycnJycnIgISJ9","Attributes":null,"PublishTime":"2019-06-24T15:16:03.683Z"}
+
         final CloudEvent<Event> cloudEvent = new CloudEventBuilder<Event>()
                 .type("sdf")
                 .id("dsf")
