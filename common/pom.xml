@@ -12,7 +12,6 @@
         <groupId>fr.aex.poc</groupId>
         <artifactId>aex-poc</artifactId>
         <version>0.1.0</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>aex-common</name>
