@@ -16,7 +16,7 @@ public class PlaylistApplication {
 	class ReferentielController {
 		@GetMapping("/podcasts")
 		List<Podcast> listPodcasts() throws IOException {
-			return PlaylistMethods.listPodcasts("");
+			return PlaylistMethods.listPodcasts(null);
 		}
 
 		@GetMapping("/version")

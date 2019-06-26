@@ -40,10 +40,6 @@ public class PlaylistMethods {
         return Resources.toString(Resources.getResource(fileName), charset);
     }
 
-    public static String getTrainsFile() {
-        return System.getenv("TRAINS_REF_FILE_NAME");
-    }
-
     public static List<Podcast> listPodcasts(String startCursor) throws IOException {
 
         PodcastDao dao = new DatastoreDao();

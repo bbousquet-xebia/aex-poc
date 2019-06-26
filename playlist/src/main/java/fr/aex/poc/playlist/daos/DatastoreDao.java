@@ -105,19 +105,17 @@ public class DatastoreDao implements PodcastDao {
             startCursor = Cursor.fromUrlSafe(startCursorString);    // Where we left off
         }
         Query<Entity> query = Query.newEntityQueryBuilder()       // Build the Query
-                .setKind("Podcast2")                                     // We only care about Podcasts
-                .setLimit(10)                                         // Only show 10 at a time
-                .setStartCursor(startCursor)                          // Where we left off
-                .setOrderBy(OrderBy.asc(Podcast.TITLE))                  // Use default Index "title"
+                .setKind("Podcast2")                                        // Only show 10 at a time
+                .setStartCursor(startCursor)               // Use default Index "title"
                 .build();
         QueryResults<Entity> resultList = datastore.run(query);   // Run the query
         List<Podcast> resultPodcasts = entitiesToPodcasts(resultList);     // Retrieve and convert Entities
         Cursor cursor = resultList.getCursorAfter();              // Where to start next time
         if (cursor != null && resultPodcasts.size() == 10) {         // Are we paging? Save Cursor
             String cursorString = cursor.toUrlSafe();               // Cursors are WebSafe
-            return new Result<Podcast>(resultPodcasts, cursorString);
+            return new Result<>(resultPodcasts, cursorString);
         } else {
-            return new Result<Podcast>(resultPodcasts);
+            return new Result<>(resultPodcasts);
         }
     }
     // [END listbooks]
