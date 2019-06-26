@@ -16,35 +16,17 @@
     </modules>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>my-repo-bucket-snapshot</id>
-            <url>gs://mvn-reposit/snapshot</url>
-        </snapshotRepository>
         <repository>
-            <id>my-repo-bucket-release</id>
-            <url>gs://mvn-reposit/release</url>
+            <id>privaterepo</id>
+            <url>https://knative-sample.appspot.com</url>
         </repository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>my-repo-bucket-snapshot</id>
-            <url>gs://mvn-reposit/snapshot</url>
-        </repository>
-        <repository>
-            <id>my-repo-bucket-release</id>
-            <url>gs://mvn-reposit/release</url>
+            <id>privaterepo</id>
+            <url>https://knative-sample.appspot.com</url>
         </repository>
     </repositories>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>com.gkatzioura.maven.cloud</groupId>
-                <artifactId>google-storage-wagon</artifactId>
-                <version>1.0</version>
-            </extension>
-        </extensions>
-    </build>
 
 </project>
