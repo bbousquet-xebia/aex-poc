@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.aex.poc</groupId>
+    <artifactId>aex-poc</artifactId>
+    <version>0.1.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>messaging-vertx</module>
+        <module>playlist</module>
+        <module>common</module>
+    </modules>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>my-repo-bucket-snapshot</id>
+            <url>gs://mvn-reposit/snapshot</url>
+        </snapshotRepository>
+        <repository>
+            <id>my-repo-bucket-release</id>
+            <url>gs://mvn-reposit/release</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>my-repo-bucket-snapshot</id>
+            <url>gs://mvn-reposit/snapshot</url>
+        </repository>
+        <repository>
+            <id>my-repo-bucket-release</id>
+            <url>gs://mvn-reposit/release</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>com.gkatzioura.maven.cloud</groupId>
+                <artifactId>google-storage-wagon</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
+    </build>
+
+</project>

@@ -1,4 +1,5 @@
 FROM maven:3.6.1-jdk-13 as build
+
 ADD pom.xml ./pom.xml
 ADD src ./src
 RUN mvn package -DskipTests

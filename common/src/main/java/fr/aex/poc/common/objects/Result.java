@@ -1,4 +1,4 @@
-package fr.aex.poc.playlist.objects;
+package fr.aex.poc.common.objects;
 
 import java.util.List;
 

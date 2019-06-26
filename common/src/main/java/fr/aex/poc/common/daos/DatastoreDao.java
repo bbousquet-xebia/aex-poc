@@ -1,4 +1,4 @@
-package fr.aex.poc.playlist.daos;
+package fr.aex.poc.common.daos;
 
 import com.google.cloud.datastore.Cursor;
 import com.google.cloud.datastore.Datastore;
@@ -10,9 +10,8 @@ import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.KeyFactory;
 import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
-import com.google.cloud.datastore.StructuredQuery.OrderBy;
-import fr.aex.poc.playlist.objects.Podcast;
-import fr.aex.poc.playlist.objects.Result;
+import fr.aex.poc.common.objects.Podcast;
+import fr.aex.poc.common.objects.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +43,13 @@ public class DatastoreDao implements PodcastDao {
     // [END entityToPodcast]
     // [START create]
     @Override
-    public Long createPodcast(Podcast book) {
+    public Long createPodcast(Podcast podcast) {
         IncompleteKey key = keyFactory.newKey();          // Key will be assigned once written
         FullEntity<IncompleteKey> incPodcastEntity = Entity.newBuilder(key)  // Create the Entity
-                .set(Podcast.AUTHOR, book.getAuthor())           // Add Property ("author", book.getAuthor())
-                .set(Podcast.DESCRIPTION, book.getDescription())
-                .set(Podcast.PUBLISHED_DATE, book.getPublishedDate())
-                .set(Podcast.TITLE, book.getTitle())
+                .set(Podcast.AUTHOR, podcast.getAuthor())           // Add Property ("author", book.getAuthor())
+                .set(Podcast.DESCRIPTION, podcast.getDescription())
+                .set(Podcast.PUBLISHED_DATE, podcast.getPublishedDate())
+                .set(Podcast.TITLE, podcast.getTitle())
                 .build();
         Entity bookEntity = datastore.add(incPodcastEntity); // Save the Entity
         return bookEntity.getKey().getId();                     // The ID of the Key
@@ -59,21 +58,21 @@ public class DatastoreDao implements PodcastDao {
 
     // [START read]
     @Override
-    public Podcast readPodcast(Long bookId) {
-        Entity bookEntity = datastore.get(keyFactory.newKey(bookId)); // Load an Entity for Key(id)
+    public Podcast readPodcast(Long podcastId) {
+        Entity bookEntity = datastore.get(keyFactory.newKey(podcastId)); // Load an Entity for Key(id)
         return entityToPodcast(bookEntity);
     }
     // [END read]
 
     // [START update]
     @Override
-    public void updatePodcast(Podcast book) {
-        Key key = keyFactory.newKey(book.getId());  // From a book, create a Key
+    public void updatePodcast(Podcast podcast) {
+        Key key = keyFactory.newKey(podcast.getId());  // From a book, create a Key
         Entity entity = Entity.newBuilder(key)         // Convert Podcast to an Entity
-                .set(Podcast.AUTHOR, book.getAuthor())
-                .set(Podcast.DESCRIPTION, book.getDescription())
-                .set(Podcast.PUBLISHED_DATE, book.getPublishedDate())
-                .set(Podcast.TITLE, book.getTitle())
+                .set(Podcast.AUTHOR, podcast.getAuthor())
+                .set(Podcast.DESCRIPTION, podcast.getDescription())
+                .set(Podcast.PUBLISHED_DATE, podcast.getPublishedDate())
+                .set(Podcast.TITLE, podcast.getTitle())
                 .build();
         datastore.update(entity);                   // Update the Entity
     }
@@ -81,8 +80,8 @@ public class DatastoreDao implements PodcastDao {
 
     // [START delete]
     @Override
-    public void deletePodcast(Long bookId) {
-        Key key = keyFactory.newKey(bookId);        // Create the Key
+    public void deletePodcast(Long podcastId) {
+        Key key = keyFactory.newKey(podcastId);        // Create the Key
         datastore.delete(key);                      // Delete the Entity
     }
     // [END delete]
@@ -96,8 +95,7 @@ public class DatastoreDao implements PodcastDao {
         return resultPodcasts;
     }
 
-    // [END entitiesToPodcasts]
-    // [START listbooks]
+
     @Override
     public Result<Podcast> listPodcasts(String startCursorString) {
         Cursor startCursor = null;

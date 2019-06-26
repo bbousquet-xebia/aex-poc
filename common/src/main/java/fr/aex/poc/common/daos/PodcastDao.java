@@ -1,7 +1,7 @@
-package fr.aex.poc.playlist.daos;
+package fr.aex.poc.common.daos;
 
-import fr.aex.poc.playlist.objects.Podcast;
-import fr.aex.poc.playlist.objects.Result;
+import fr.aex.poc.common.objects.Podcast;
+import fr.aex.poc.common.objects.Result;
 
 import java.sql.SQLException;
 

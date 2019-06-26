@@ -1,13 +1,10 @@
 package fr.aex.poc.playlist;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import fr.aex.poc.playlist.daos.DatastoreDao;
-import fr.aex.poc.playlist.daos.PodcastDao;
-import fr.aex.poc.playlist.objects.Podcast;
-import fr.aex.poc.playlist.objects.Result;
+import fr.aex.poc.common.daos.DatastoreDao;
+import fr.aex.poc.common.daos.PodcastDao;
+import fr.aex.poc.common.objects.Podcast;
+import fr.aex.poc.common.objects.Result;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

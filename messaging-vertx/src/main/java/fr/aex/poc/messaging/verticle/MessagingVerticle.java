@@ -1,5 +1,8 @@
 package fr.aex.poc.messaging.verticle;
 
+import fr.aex.poc.common.daos.DatastoreDao;
+import fr.aex.poc.common.daos.PodcastDao;
+import fr.aex.poc.common.objects.Podcast;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.CloudEventBuilder;
 import io.cloudevents.http.reactivex.vertx.VertxCloudEvents;
@@ -11,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.sql.SQLException;
 
 public class MessagingVerticle extends AbstractVerticle {
 
@@ -19,12 +23,20 @@ public class MessagingVerticle extends AbstractVerticle {
     public void start() {
 
         vertx.createHttpServer()
-                .requestHandler(req -> VertxCloudEvents.create().rxReadFromRequest(req)
+                .requestHandler(req -> VertxCloudEvents.create().<Podcast>rxReadFromRequest(req)
                         .subscribe((receivedEvent, throwable) -> {
                             if (receivedEvent != null) {
 
-                                System.out.println("The event type: " + receivedEvent.getType());
-                                System.out.println("The content: " + receivedEvent.getData());
+                                PodcastDao dao = new DatastoreDao();
+
+                                receivedEvent.getData().ifPresent(podcast -> {
+                                            try {
+                                                dao.createPodcast(podcast);
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                );
 
                             }
                         }))
@@ -39,15 +51,18 @@ public class MessagingVerticle extends AbstractVerticle {
         final HttpClientRequest request = Vertx.vertx().createHttpClient().post(8080, "localhost", "/");
 
 
-        Event event = new Event();
-        event.message = "sfsdf";
+        Podcast event = new Podcast.Builder()
+                .author("sdfsdfd")
+                .title("sdfsdfsdf")
+                .description("dsfsdfsdf")
+                .build();
 
 //        {"ID":"640313443588257","Data":"eyJtZXNzYWdlIjoiR3JycnJycnJycnIgISJ9","Attributes":null,"PublishTime":"2019-06-24T15:16:03.683Z"}
 
-        final CloudEvent<Event> cloudEvent = new CloudEventBuilder<Event>()
-                .type("sdf")
+        final CloudEvent<Podcast> cloudEvent = new CloudEventBuilder<Podcast>()
+                .type("aex.poc.podcast")
                 .id("dsf")
-                .source(URI.create("/trigger"))
+                .source(URI.create("/podcast"))
                 .data(event)
                 .build();
 

@@ -4,9 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.aex.poc</groupId>
     <artifactId>aex-messaging-vertx</artifactId>
     <version>0.1.0</version>
+
+    <parent>
+        <groupId>fr.aex.poc</groupId>
+        <artifactId>aex-poc</artifactId>
+        <version>0.1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>aex-messaging-vertx</name>
 
     <properties>
         <main.verticle>fr.aex.poc.messaging.verticle.MessagingVerticle</main.verticle>
@@ -102,6 +110,11 @@
             <version>${disruptor-for-log4j-async.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>fr.aex.poc</groupId>
+            <artifactId>aex-common</artifactId>
+            <version>0.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -111,7 +124,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
                     <configuration>
-                        <release>11</release>
+                        <release>12</release>
                     </configuration>
                 </plugin>
             </plugins>

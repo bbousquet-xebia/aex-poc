@@ -1,6 +1,6 @@
 package fr.aex.poc.playlist;
 
-import fr.aex.poc.playlist.objects.Podcast;
+import fr.aex.poc.common.objects.Podcast;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
