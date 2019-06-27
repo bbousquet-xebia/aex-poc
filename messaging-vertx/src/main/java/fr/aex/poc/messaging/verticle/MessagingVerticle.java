@@ -1,5 +1,7 @@
 package fr.aex.poc.messaging.verticle;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import fr.aex.poc.common.daos.DatastoreDao;
 import fr.aex.poc.common.daos.PodcastDao;
 import fr.aex.poc.common.objects.Podcast;
@@ -13,8 +15,11 @@ import io.vertx.reactivex.core.http.HttpClientRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.sql.SQLException;
+import java.util.Base64;
 
 public class MessagingVerticle extends AbstractVerticle {
 
@@ -23,16 +28,27 @@ public class MessagingVerticle extends AbstractVerticle {
     public void start() {
 
         vertx.createHttpServer()
-                .requestHandler(req -> VertxCloudEvents.create().<Podcast>rxReadFromRequest(req)
+                .requestHandler(req -> VertxCloudEvents.create().<String>rxReadFromRequest(req)
                         .subscribe((receivedEvent, throwable) -> {
                             if (receivedEvent != null) {
 
                                 PodcastDao dao = new DatastoreDao();
 
-                                receivedEvent.getData().ifPresent(podcast -> {
+                                receivedEvent.getData().ifPresent(podcastString -> {
                                             try {
+                                                byte[] asBytes = Base64.getDecoder().decode(podcastString);
+                                                com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                                                String str = new String(asBytes, Charset.forName("UTF-8"));
+                                                Podcast podcast = mapper.readValue(str, Podcast.class);
+
                                                 dao.createPodcast(podcast);
                                             } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            } catch (JsonParseException e) {
+                                                e.printStackTrace();
+                                            } catch (JsonMappingException e) {
+                                                e.printStackTrace();
+                                            } catch (IOException e) {
                                                 e.printStackTrace();
                                             }
                                         }
