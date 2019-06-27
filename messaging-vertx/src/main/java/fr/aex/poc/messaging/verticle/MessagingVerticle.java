@@ -1,7 +1,5 @@
 package fr.aex.poc.messaging.verticle;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.pubsub.v1.PubsubMessage;
 import fr.aex.poc.common.daos.DatastoreDao;
 import fr.aex.poc.common.daos.PodcastDao;
@@ -30,9 +28,13 @@ public class MessagingVerticle extends AbstractVerticle {
 
     private Podcast deserializeMessage(String message) {
         try {
-            PubsubMessage messageObject = mapper.readValue(message, PubsubMessage.class);
+            PubSubMessage messageObject = mapper.readValue(message, PubSubMessage.class);
+
+            byte[] decodedBytes = Base64.getDecoder().decode(messageObject.getData());
+            String decodedString = new String(decodedBytes);
+
             return mapper.readValue(
-                    messageObject.getData().toStringUtf8(),
+                    decodedString,
                     Podcast.class
             );
         } catch (IOException e) {
