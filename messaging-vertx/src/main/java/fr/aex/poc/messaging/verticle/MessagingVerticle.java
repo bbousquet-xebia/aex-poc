@@ -36,6 +36,8 @@ public class MessagingVerticle extends AbstractVerticle {
 
                                 receivedEvent.getData().ifPresent(podcastString -> {
                                             try {
+                                                System.out.println("Message received : " + podcastString);
+
                                                 byte[] asBytes = Base64.getDecoder().decode(podcastString);
                                                 com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
                                                 String str = new String(asBytes, Charset.forName("UTF-8"));
