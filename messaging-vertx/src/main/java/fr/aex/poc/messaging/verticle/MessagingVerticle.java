@@ -26,24 +26,38 @@ public class MessagingVerticle extends AbstractVerticle {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessagingVerticle.class);
 
+    com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+
+    private Podcast deserializeMessage(String message) {
+        try {
+            PubsubMessage messageObject = mapper.readValue(message, PubsubMessage.class);
+            return mapper.readValue(
+                    messageObject.getData().toStringUtf8(),
+                    Podcast.class
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void start() {
 
         vertx.createHttpServer()
-                .requestHandler(req -> VertxCloudEvents.create().<PubsubMessage>rxReadFromRequest(req)
+                .requestHandler(req -> VertxCloudEvents.create().<String>rxReadFromRequest(req)
                         .subscribe((receivedEvent, throwable) -> {
                             if (receivedEvent != null) {
 
                                 PodcastDao dao = new DatastoreDao();
 
                                 receivedEvent.getData().ifPresent(message -> {
-                                                System.out.println("Message received : " + message.getData());
+                                                System.out.println("Message received : " + message);
 
-//                                                byte[] asBytes = Base64.getDecoder().decode(podcastString);
-                                                com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-     //                                           String str = new String(message.getData(), Charset.forName("UTF-8"));
-//                                                Podcast podcast = mapper.readValue(, Podcast.class);
-
- //                                               dao.createPodcast(podcast);
+                                            try {
+                                                dao.createPodcast(deserializeMessage(message));
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                 );
 
