@@ -2,6 +2,7 @@ package fr.aex.poc.messaging.verticle;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.pubsub.v1.PubsubMessage;
 import fr.aex.poc.common.daos.DatastoreDao;
 import fr.aex.poc.common.daos.PodcastDao;
 import fr.aex.poc.common.objects.Podcast;
@@ -28,31 +29,21 @@ public class MessagingVerticle extends AbstractVerticle {
     public void start() {
 
         vertx.createHttpServer()
-                .requestHandler(req -> VertxCloudEvents.create().<String>rxReadFromRequest(req)
+                .requestHandler(req -> VertxCloudEvents.create().<PubsubMessage>rxReadFromRequest(req)
                         .subscribe((receivedEvent, throwable) -> {
                             if (receivedEvent != null) {
 
                                 PodcastDao dao = new DatastoreDao();
 
-                                receivedEvent.getData().ifPresent(podcastString -> {
-                                            try {
-                                                System.out.println("Message received : " + podcastString);
+                                receivedEvent.getData().ifPresent(message -> {
+                                                System.out.println("Message received : " + message.getData());
 
-                                                byte[] asBytes = Base64.getDecoder().decode(podcastString);
+//                                                byte[] asBytes = Base64.getDecoder().decode(podcastString);
                                                 com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-                                                String str = new String(asBytes, Charset.forName("UTF-8"));
-                                                Podcast podcast = mapper.readValue(str, Podcast.class);
+     //                                           String str = new String(message.getData(), Charset.forName("UTF-8"));
+//                                                Podcast podcast = mapper.readValue(, Podcast.class);
 
-                                                dao.createPodcast(podcast);
-                                            } catch (SQLException e) {
-                                                e.printStackTrace();
-                                            } catch (JsonParseException e) {
-                                                e.printStackTrace();
-                                            } catch (JsonMappingException e) {
-                                                e.printStackTrace();
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
+ //                                               dao.createPodcast(podcast);
                                         }
                                 );
 
