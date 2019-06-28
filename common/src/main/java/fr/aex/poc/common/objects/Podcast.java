@@ -37,6 +37,9 @@ public class Podcast {
     }
     // [END constructor]
 
+    public Podcast() {
+    }
+
     // [START builder]
     public static class Builder {
         private String title;
